@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
 const helmet = require('helmet');
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -33,8 +35,35 @@ app.post('/addTestData', (req, res) => {
         }
     })
 
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        auth: {
+            user: 'webassembly999@gmail.com',
+            pass: 'dasIstWebassembly1234'
+        }
+    });
+
+
+    let mailOptions = {
+        from: 'webassembly999@gmail.com',
+        to: 'benedikt.dornauer@gmail.at',
+        subject: 'Sending Email using Node.js',
+        text: 'test'
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+
     res.send('Test was added. Thank you');
+
 });
+
 
 
 app.listen(port, () => console.log(`Hello world app listening on port ${port}!`));
