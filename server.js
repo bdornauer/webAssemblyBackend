@@ -44,10 +44,9 @@ app.post('/addTestData', (req, res) => {
         }
     });
 
-
     let mailOptions = {
         from: 'webassembly999@gmail.com',
-        to: 'benedikt.dornauer@gmail.at',
+        to: 'benedikt.dornauer@outlook.at',
         subject: 'Sending Email using Node.js',
         text: 'test'
     };
