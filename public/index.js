@@ -1,5 +1,7 @@
 document.getElementById('startTest').addEventListener('click', startTest);
 
+let progressbar = document.getElementById('progressbar');
+
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
@@ -119,19 +121,24 @@ function infoUser() {
 
 async function startTest() {
     console.log("----------------------");
+    let load = 0;
+    let numTests = 30;
     let userInfo = infoUser();
     let results = {areaJS: [], sortJS: [], areaWAMS: [], sortWAMS: []}
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < numTests; i++) {
         arr = create();
         results.sortJS.push(measureSortingJS(arr));
         results.areaJS.push(measureAreaCalcJS(1));
         results.sortWAMS.push(await measureSortingJS(arr))
         results.areaWAMS.push(await measureAreaCalcWAMS());
+        load++;
+        progressbar.style.width = ((load/numTests)*100 ).toString()+"%";
     }
+
     result = {info: userInfo, measurements: results};
     console.log(result);
 
-    fetch('https://webassemblytest.herokuapp.com/addTestData', {
+    await fetch('https://webassemblytest.herokuapp.com/addTestData', {
         method: 'POST', // or 'PUT'
         headers: {
             'Content-Type': 'application/json',
@@ -145,6 +152,6 @@ async function startTest() {
             console.error('Error:', error);
         });
 
-
+    document.querySelector('.wrapper').innerHTML = "<h1>Vielen Dank für die Teilnahme</h1><a href=\"https://www.google.at/\"><button type=\"button\" class=\"btn btn-outline-secondary\" >Zu Googel</button>";
 }
 

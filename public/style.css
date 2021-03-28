@@ -1,0 +1,16 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+.wrapper {
+    min-height: 100%;
+    margin: 50px;
+    /* Equal to height of footer */
+    /* But also accounting for potential margin-bottom of last child */
+    margin-bottom: -100px;
+    text-align: center;
+}
+.footer,
+.push {
+    height: 50px;
+}
