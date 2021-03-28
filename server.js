@@ -48,7 +48,7 @@ app.post('/addTestData', (req, res) => {
         from: 'webassembly999@gmail.com',
         to: 'benedikt.dornauer@outlook.at',
         subject: 'Sending Email using Node.js',
-        text: 'test'
+        text: jsonString
     };
 
     transporter.sendMail(mailOptions, function(error, info){
