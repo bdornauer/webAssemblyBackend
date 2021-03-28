@@ -7,7 +7,7 @@ const helmet = require('helmet');
 const app = express();
 const port = process.env.PORT || 3000;
 
-
+app.use(express.static('public'));
 app.use(cors());
 app.use(helmet());
 
@@ -15,6 +15,9 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+app.get('/', function (req, res) {
+    res.sendFile(path.join('./index.html'));
+});
 
 app.post('/addTestData', (req, res) => {
 
