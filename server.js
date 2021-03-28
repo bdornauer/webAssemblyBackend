@@ -21,11 +21,11 @@ app.get('/', function (req, res) {
 
 app.post('/addTestData', (req, res) => {
 
-    let data = require('./tests.json');
+    let data = require('./public/tests.json');
     data.push(req.body);
     const jsonString = JSON.stringify(data)
 
-    fs.writeFile('./tests.json', jsonString, err => {
+    fs.writeFile('./public/tests.json', jsonString, err => {
         if (err) {
             console.log('Error writing file', err)
         } else {
