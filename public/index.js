@@ -130,7 +130,7 @@ async function startTest() {
     }
     result = {info: userInfo, measurements: results};
     resultJSON = JSON.stringify(result);
-    console.log(result);
+    console.log(resultJSON);
 
     const Http = new XMLHttpRequest();
     const url='https://webassemblytest.herokuapp.com/addTestData';
