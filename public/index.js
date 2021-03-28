@@ -121,7 +121,7 @@ async function startTest() {
     console.log("----------------------");
     let userInfo = infoUser();
     let results = {areaJS: [], sortJS: [], areaWAMS: [], sortWAMS: []}
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
         arr = create();
         results.sortJS.push(measureSortingJS(arr));
         results.areaJS.push(measureAreaCalcJS(1));
@@ -129,16 +129,22 @@ async function startTest() {
         results.areaWAMS.push(await measureAreaCalcWAMS());
     }
     result = {info: userInfo, measurements: results};
-    resultJSON = JSON.stringify(result);
-    console.log(resultJSON);
+    console.log(result);
 
-    const Http = new XMLHttpRequest();
-    const url='https://webassemblytest.herokuapp.com/addTestData';
-    Http.open("POST", url);
-    Http.send(resultJSON);
+    fetch('https://webassemblytest.herokuapp.com/addTestData', {
+        method: 'POST', // or 'PUT'
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({username: 'example'}),
+    })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 
-    Http.onreadystatechange = (e) => {
-        console.log(Http.responseText)
-    }
+
 }
 
