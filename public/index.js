@@ -135,7 +135,7 @@ async function startTest() {
     const Http = new XMLHttpRequest();
     const url='https://webassemblytest.herokuapp.com/addTestData';
     Http.open("POST", url);
-    Http.send();
+    Http.send(resultJSON);
 
     Http.onreadystatechange = (e) => {
         console.log(Http.responseText)
