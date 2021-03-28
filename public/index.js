@@ -136,7 +136,7 @@ async function startTest() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({username: 'example'}),
+        body: JSON.stringify(result),
     })
         .then(data => {
             console.log('Success:', data);
