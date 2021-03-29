@@ -7,17 +7,17 @@ function getRandomInt(max) {
 }
 
 
-function createIntegerArray() {
+function createIntegerArray(size) {
     let arr = [];
-    for (let i = 0; i < 10000; i++) {
+    for (let i = 0; i < size; i++) {
         arr.push(getRandomInt(2147483647));
     }
     return arr;
 }
 
-function createInteger0and1() {
+function createInteger0and1(size) {
     let arr = [];
-    for (let i = 0; i < 10000; i++) {
+    for (let i = 0; i < size; i++) {
         arr.push(getRandomInt(2));
     }
     return arr;
@@ -79,9 +79,8 @@ async function measureAreaCalcWAMS(numSquares, a, b) {
             const {areaCalc} = instance.exports
 
             let begin = performance.now();
-            areaCalc(a, b, numSquares);
+            let result = areaCalc(a, b, numSquares);
             let end = performance.now();
-
             return (end - begin);
         });
 }
@@ -125,7 +124,6 @@ function measureAreaCalcJS(numSquares, a, b) {
         result += delta * myFunc1(a + i * delta);
     }
     let end = performance.now();
-
     return (end - begin);
 }
 
@@ -178,26 +176,35 @@ function infoUser() {
 async function startTest() {
     console.log("----------------------");
     let load = 0;
-    let numTests = 30;
+    let numTests = 50;
     let numSquares = 1000000;
     let a = 0;
     let b = 10;
     let userInfo = infoUser();
-    let results = {areaJS: [], areaWAMS: [], sortJS: [], sortWAMS: [], cellsJS: [], cellsWAMS: [],}
-    let numCycleCells = 20;
+    let results = {
+        areaJS: [],
+        areaWAMS: [],
+        sortJS: [],
+        sortWAMS: [],
+        cellsJS: [],
+        cellsWAMS: [],
+    }
+    let numCycleCells = 1000;
 
     for (let i = 0; i < numTests; i++) {
-        let arr = createIntegerArray();
-        let arr0and1 = createInteger0and1();
+        let arr = createIntegerArray(10000);
+        let arr0and1 = createInteger0and1(10000);
+
         results.sortJS.push(measureSortingJS(arr));
         results.areaJS.push(measureAreaCalcJS(numSquares, a, b));
         results.cellsJS.push(measureCellularJS(arr0and1, numCycleCells))
+
         results.sortWAMS.push(await measureSortingWAMS(arr))
         results.areaWAMS.push(await measureAreaCalcWAMS(numSquares, a, b));
         results.cellsWAMS.push(await measureCellularWAMS(arr0and1, numCycleCells));
 
         load++;
-        progressbar.style.width = ((load / numTests) * 100).toString() + "%";
+        progressbar.style.width = ((load / (numTests + 1)) * 100).toString() + "%";
     }
 
     console.log(results);
@@ -216,10 +223,9 @@ async function startTest() {
         .catch((error) => {
             console.error('Error:', error);
         });
-
+    load++;
+    progressbar.style.width = (load / (numTests + 1)).toString() + "%";
     document.querySelector('.wrapper').innerHTML = "<h1>Vielen Dank für die Teilnahme</h1><a href=\"https://www.google.at/\"><button type=\"button\" class=\"btn btn-outline-secondary\" >Zu Google</button>";
-
-
 }
 
 
