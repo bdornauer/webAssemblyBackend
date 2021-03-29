@@ -119,6 +119,7 @@ function infoUser() {
         mobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
         platform: navigator.platform,
         browser: navigator.appVersion,
+        time: Date.now().toString()
     }
     return info;
 }
