@@ -183,7 +183,7 @@ async function startTest() {
     let a = 0;
     let b = 10;
     let userInfo = infoUser();
-    let results = {areaJS: [], sortJS: [], cellsJS: [], areaWAMS: [], sortWAMS: [], cellsWAMS: []}
+    let results = {areaJS: [], areaWAMS: [], sortJS: [], sortWAMS: [], cellsJS: [], cellsWAMS: [],}
     let numCycleCells = 20;
 
     for (let i = 0; i < numTests; i++) {
