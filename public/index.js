@@ -225,7 +225,7 @@ async function startTest() {
         });
     load++;
     progressbar.style.width = (load / (numTests + 1)).toString() + "%";
-    document.querySelector('.wrapper').innerHTML = "<h1>Vielen Dank für die Teilnahme</h1><a href=\"https://www.google.at/\"><button type=\"button\" class=\"btn btn-outline-secondary\" >Zu Google</button>";
+    document.querySelector('.wrapper').innerHTML = "<h1>Vielen Dank für die Teilnahme!</h1><a href=\"https://www.google.at/\"><button type=\"button\" class=\"btn btn-outline-secondary\" >Zu Google</button>";
 }
 
 
