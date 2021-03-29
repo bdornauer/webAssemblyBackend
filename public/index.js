@@ -115,7 +115,12 @@ function measureAreaCalcJS(funcNum) {
 }
 
 function infoUser() {
-    return (navigator.appVersion);
+    let info = {
+        mobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
+        platform: navigator.platform,
+        browser: navigator.appVersion,
+    }
+    return info;
 }
 
 
@@ -132,7 +137,7 @@ async function startTest() {
         results.sortWAMS.push(await measureSortingJS(arr))
         results.areaWAMS.push(await measureAreaCalcWAMS());
         load++;
-        progressbar.style.width = ((load/numTests)*100 ).toString()+"%";
+        progressbar.style.width = ((load / numTests) * 100).toString() + "%";
     }
 
     result = {info: userInfo, measurements: results};
