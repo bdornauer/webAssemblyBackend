@@ -198,7 +198,12 @@ async function startTest() {
         areaWAMS10000: [],
         areaWAMS100000: [],
         areaWAMS1000000: [],
-        sortJS: [],
+        sortJS2500: [],
+        sortJS5000: [],
+        sortJS10000: [],
+        sortWAMS2500: [],
+        sortWAMS5000: [],
+        sortWAMS10000: [],
         sortWAMS: [],
         cellsJS: [],
         cellsWAMS: [],
@@ -206,20 +211,35 @@ async function startTest() {
     let numCycleCells = 1000;
 
     for (let i = 0; i < numTests; i++) {
-        let arr = createIntegerArray(10000);
+
         let arr0and1 = createInteger0and1(10000);
+
+        let arr2500 = createIntegerArray(2500);
+        let arr5000 = createIntegerArray(5000);
+        let arr10000 = createIntegerArray(10000);
 
 
         results.areaJS10000.push(measureAreaCalcJS(10000, a, b));
         results.areaWAMS10000.push(await measureAreaCalcWAMS(10000, a, b));
 
-        results.sortJS.push(measureSortingJS(arr));
+        results.sortJS2500.push(measureSortingJS(arr2500));
+        results.sortWAMS2500.push(measureSortingWAMS(arr2500));
+
+        results.sortJS5000.push(measureSortingJS(arr5000));
+        results.sortWAMS5000.push(measureSortingWAMS(arr5000));
+
+        results.sortJS10000.push(measureSortingJS(arr10000));
+        results.sortWAMS10000.push(measureSortingWAMS(arr10000));
+
+        results.sortJS5000.push(arr5000);
+        results.sortJS10000.push(arr10000);
+
         results.cellsJS.push(measureCellularJS(arr0and1, numCycleCells))
 
         results.areaJS100000.push(measureAreaCalcJS(100000, a, b));
         results.areaWAMS100000.push(await measureAreaCalcWAMS(100000, a, b));
 
-        results.sortWAMS.push(await measureSortingWAMS(arr))
+        results.sortWAMS.push(await measureSortingWAMS(arr10000))
         results.cellsWAMS.push(await measureCellularWAMS(arr0and1, numCycleCells));
 
         results.areaJS1000000.push(measureAreaCalcJS(1000000, a, b));
