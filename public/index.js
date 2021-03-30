@@ -235,23 +235,6 @@ async function startTest() {
             console.error('Error:', error);
         });
 
-    load++;
-
-
-    await fetch('https://api.jsonstorage.net/v1/json/10194609-5224-4f11-ba86-e8240a2cd147?apiKey=e0123682-272c-4cf9-9f66-b00b76117b76', {
-        method: 'PUT', // or 'PUT'
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-
     load += 4;
     progressbar.style.width = (load / (numTests + 1)).toString() + "%";
     document.querySelector('.wrapper').innerHTML = "<h1>Vielen Dank für die Teilnahme!</h1><a href=\"https://www.google.at/\"><button type=\"button\" class=\"btn btn-outline-secondary\" >Zu Google</button>";
