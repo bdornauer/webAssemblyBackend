@@ -73,7 +73,7 @@ app.post('/addTestData', async (req, res) => {
         from: 'webassembly999@gmail.com',
         to: 'benedikt.dornauer@outlook.at',
         subject: 'Sending Email using Node.js',
-        text: jsonString
+        text: JSON.stringify(data2)
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
