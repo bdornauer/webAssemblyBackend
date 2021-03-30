@@ -187,70 +187,93 @@ async function startTest() {
     console.log("----------------------");
     let load = 0;
     let numTests = 30;
-    let numSquares = 1000000;
+
     let a = 0;
     let b = 10;
     let userInfo = infoUser();
-    let results = {
+
+
+    let testArea = {
         areaJS10000: [],
         areaJS100000: [],
         areaJS1000000: [],
         areaWAMS10000: [],
         areaWAMS100000: [],
         areaWAMS1000000: [],
-        sortJS2500: [],
-        sortJS5000: [],
-        sortJS10000: [],
-        sortWAMS2500: [],
-        sortWAMS5000: [],
-        sortWAMS10000: [],
-        sortWAMS: [],
-        cellsJS: [],
-        cellsWAMS: [],
     }
+
+    let testSort =
+        {
+            sortJS2500: [],
+            sortJS5000: [],
+            sortJS10000: [],
+            sortWAMS2500: [],
+            sortWAMS5000: [],
+            sortWAMS10000: [],
+        }
+
+    let testCells =
+        {
+            cellsJS250: [],
+            cellsJS500: [],
+            cellsJS1000: [],
+            cellsWAMS250: [],
+            cellsWAMS500: [],
+            cellsWAMS1000: [],
+        }
+
+
     let numCycleCells = 1000;
 
     for (let i = 0; i < numTests; i++) {
 
-        let arr0and1 = createInteger0and1(10000);
+        let arr0and1_250 = createInteger0and1(250);
+        let arr0and1_500 = createInteger0and1(500);
+        let arr0and1_1000 = createInteger0and1(10000);
 
         let arr2500 = createIntegerArray(2500);
         let arr5000 = createIntegerArray(5000);
         let arr10000 = createIntegerArray(10000);
 
+        //Small
+        testSort.sortJS2500.push(measureSortingJS(arr2500));
+        testSort.sortWAMS2500.push(await measureSortingWAMS(arr2500));
 
-        results.areaJS10000.push(measureAreaCalcJS(10000, a, b));
-        results.areaWAMS10000.push(await measureAreaCalcWAMS(10000, a, b));
+        testArea.areaJS10000.push(measureAreaCalcJS(10000, a, b));
+        testArea.areaWAMS10000.push(await measureAreaCalcWAMS(10000, a, b));
 
-        results.sortJS2500.push(measureSortingJS(arr2500));
-        results.sortWAMS2500.push(measureSortingWAMS(arr2500));
+        testCells.cellsJS250.push(measureCellularJS(arr0and1_250, numCycleCells))
+        testCells.cellsWAMS250.push(await measureCellularWAMS(arr0and1_250, numCycleCells))
 
-        results.sortJS5000.push(measureSortingJS(arr5000));
-        results.sortWAMS5000.push(measureSortingWAMS(arr5000));
 
-        results.sortJS10000.push(measureSortingJS(arr10000));
-        results.sortWAMS10000.push(measureSortingWAMS(arr10000));
+        //Middle
+        testSort.sortJS5000.push(measureSortingJS(arr5000));
+        testSort.sortWAMS5000.push(await measureSortingWAMS(arr5000));
 
-        results.sortJS5000.push(arr5000);
-        results.sortJS10000.push(arr10000);
+        testArea.areaJS100000.push(measureAreaCalcJS(100000, a, b));
+        testArea.areaWAMS100000.push(await measureAreaCalcWAMS(100000, a, b));
 
-        results.cellsJS.push(measureCellularJS(arr0and1, numCycleCells))
+        testCells.cellsJS500.push(measureCellularJS(arr0and1_500, numCycleCells))
+        testCells.cellsWAMS500.push(await measureCellularWAMS(arr0and1_500, numCycleCells))
 
-        results.areaJS100000.push(measureAreaCalcJS(100000, a, b));
-        results.areaWAMS100000.push(await measureAreaCalcWAMS(100000, a, b));
+        //Large
+        testSort.sortJS10000.push(measureSortingJS(arr10000));
+        testSort.sortWAMS10000.push(await measureSortingWAMS(arr10000));
 
-        results.sortWAMS.push(await measureSortingWAMS(arr10000))
-        results.cellsWAMS.push(await measureCellularWAMS(arr0and1, numCycleCells));
+        testArea.areaJS1000000.push(measureAreaCalcJS(1000000, a, b));
+        testArea.areaWAMS1000000.push(await measureAreaCalcWAMS(1000000, a, b));
 
-        results.areaJS1000000.push(measureAreaCalcJS(1000000, a, b));
-        results.areaWAMS1000000.push(await measureAreaCalcWAMS(1000000, a, b));
+        testCells.cellsJS1000.push(measureCellularJS(arr0and1_1000, numCycleCells))
+        testCells.cellsWAMS1000.push(await measureCellularWAMS(arr0and1_1000, numCycleCells))
 
-        progressbar.style.width = ((load / (numTests + 4)) * 100).toString() + "%";
+        progressbar.style.width = ((load / (numTests + 10)) * 100).toString() + "%";
         load++;
     }
 
+    let resultArea = {info: userInfo, measurements: testArea};
+    let resultSort = {info: userInfo, measurements: testSort};
+    let resultCells = {info: userInfo, measurements: testCells};
 
-    let result = {info: userInfo, measurements: results};
     console.log(result);
 
     await fetch('https://webassemblytest.herokuapp.com/addTestData', {
@@ -258,7 +281,35 @@ async function startTest() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(result),
+        body: JSON.stringify(resultSort),
+    })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+    await fetch('https://webassemblytest.herokuapp.com/addTestData', {
+        method: 'POST', // or 'PUT'
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(resultArea),
+    })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+    await fetch('https://webassemblytest.herokuapp.com/addTestData', {
+        method: 'POST', // or 'PUT'
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(resultCells),
     })
         .then(data => {
             console.log('Success:', data);
@@ -268,7 +319,9 @@ async function startTest() {
         });
 
 
-    load += 4;
+    load += 3;
+
+
     progressbar.style.width = (load / (numTests + 4)).toString() + "%";
     document.querySelector('.wrapper').innerHTML = "<div style='margin-top: 30%'></div><h1>Vielen Dank für die Teilnahme!</h1><a href=\"https://www.google.at/\"><button type=\"button\" class=\"btn btn-outline-secondary\" >Zu Google</button></div>";
 }
