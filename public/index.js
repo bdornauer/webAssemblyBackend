@@ -226,6 +226,8 @@ async function startTest() {
     let numCycleCells = 1000;
 
     for (let i = 0; i < numTests; i++) {
+        load++;
+        progressbar.style.width = ((load / (numTests + 10)) * 100).toString() + "%";
 
         let arr0and1_250 = createInteger0and1(250);
         let arr0and1_500 = createInteger0and1(500);
@@ -266,8 +268,7 @@ async function startTest() {
         testCells.cellsJS1000.push(measureCellularJS(arr0and1_1000, numCycleCells))
         testCells.cellsWAMS1000.push(await measureCellularWAMS(arr0and1_1000, numCycleCells))
 
-        progressbar.style.width = ((load / (numTests + 10)) * 100).toString() + "%";
-        load++;
+
     }
 
     let resultArea = {info: userInfo, testsArea: testArea};
