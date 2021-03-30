@@ -4,7 +4,7 @@ const cors = require('cors');
 const fs = require('fs');
 const helmet = require('helmet');
 const nodemailer = require('nodemailer');
-const request = require('request');
+const fetch = require('node-fetch')
 
 
 const app = express();
@@ -44,6 +44,20 @@ app.post('/addTestData', async (req, res) => {
         .then(response => response.json());
 
     data2.push(req.body);
+
+    await fetch('https://api.jsonstorage.net/v1/json/10194609-5224-4f11-ba86-e8240a2cd147?apiKey=e0123682-272c-4cf9-9f66-b00b76117b76', {
+        method: 'PUT', // or 'PUT'
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data2),
+    })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 
     //mailing result
     let transporter = nodemailer.createTransport({
