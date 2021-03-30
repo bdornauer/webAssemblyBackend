@@ -186,7 +186,7 @@ function infoUser() {
 async function startTest() {
     console.log("----------------------");
     let load = 0;
-    let numTests = 5;
+    let numTests = 30;
     let numSquares = 1000000;
     let a = 0;
     let b = 10;
