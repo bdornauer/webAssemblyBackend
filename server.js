@@ -4,7 +4,8 @@ const cors = require('cors');
 const fs = require('fs');
 const helmet = require('helmet');
 const nodemailer = require('nodemailer');
-const smtpTransport = require('nodemailer-smtp-transport');
+const request = require('request');
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,8 +22,10 @@ app.get('/', function (req, res) {
     res.sendFile(path.join('./index.html'));
 });
 
-app.post('/addTestData', (req, res) => {
+app.post('/addTestData', async (req, res) => {
 
+
+    //local storage
     let data = require('./public/tests.json');
     data.push(req.body);
     const jsonString = JSON.stringify(data)
@@ -35,6 +38,14 @@ app.post('/addTestData', (req, res) => {
         }
     })
 
+
+    //extra storage
+    let data2 = await fetch('https://api.jsonstorage.net/v1/json/10194609-5224-4f11-ba86-e8240a2cd147?apiKey=e0123682-272c-4cf9-9f66-b00b76117b76')
+        .then(response => response.json());
+
+    data2.push(req.body);
+
+    //mailing result
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         host: 'smtp.gmail.com',
@@ -51,7 +62,7 @@ app.post('/addTestData', (req, res) => {
         text: jsonString
     };
 
-    transporter.sendMail(mailOptions, function(error, info){
+    transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
         } else {
@@ -59,10 +70,11 @@ app.post('/addTestData', (req, res) => {
         }
     });
 
+    //webAssemblyUser
+    //webAssembly_123
     res.send('Test was added. Thank you');
 
 });
-
 
 
 app.listen(port, () => console.log(`Hello world app listening on port ${port}!`));

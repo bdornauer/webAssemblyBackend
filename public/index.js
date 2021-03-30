@@ -164,8 +164,18 @@ function test(left, center, right) {
  */
 
 function infoUser() {
+    let mobile = "";
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        // true for mobile device
+        mobile = "mobile device";
+    } else {
+        // false for not mobile device
+        mobile = "not mobile device";
+    }
     return {
-        mobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
+        mobile: mobile,
+        width: window.innerWidth,
+        height: window.innerHeight,
         platform: navigator.platform,
         browser: navigator.appVersion,
         time: new Date().toISOString()
@@ -176,7 +186,7 @@ function infoUser() {
 async function startTest() {
     console.log("----------------------");
     let load = 0;
-    let numTests = 50;
+    let numTests = 5;
     let numSquares = 1000000;
     let a = 0;
     let b = 10;
@@ -203,12 +213,13 @@ async function startTest() {
         results.areaWAMS.push(await measureAreaCalcWAMS(numSquares, a, b));
         results.cellsWAMS.push(await measureCellularWAMS(arr0and1, numCycleCells));
 
+        progressbar.style.width = ((load / (numTests + 4)) * 100).toString() + "%";
         load++;
-        progressbar.style.width = ((load / (numTests + 1)) * 100).toString() + "%";
     }
 
-    console.log(results);
+
     let result = {info: userInfo, measurements: results};
+    console.log(result);
 
     await fetch('https://webassemblytest.herokuapp.com/addTestData', {
         method: 'POST', // or 'PUT'
@@ -223,7 +234,25 @@ async function startTest() {
         .catch((error) => {
             console.error('Error:', error);
         });
+
     load++;
+
+
+    await fetch('https://api.jsonstorage.net/v1/json/10194609-5224-4f11-ba86-e8240a2cd147?apiKey=e0123682-272c-4cf9-9f66-b00b76117b76', {
+        method: 'PUT', // or 'PUT'
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+    load += 4;
     progressbar.style.width = (load / (numTests + 1)).toString() + "%";
     document.querySelector('.wrapper').innerHTML = "<h1>Vielen Dank für die Teilnahme!</h1><a href=\"https://www.google.at/\"><button type=\"button\" class=\"btn btn-outline-secondary\" >Zu Google</button>";
 }
