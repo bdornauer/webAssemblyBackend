@@ -39,7 +39,7 @@ async function measureSortingWAMS(arr) {
             const {sortIntArray, memory} = instance.exports
 
             let begin = performance.now();
-            const array = new Int32Array(memory.buffer, 0, 10000);
+            const array = new Int32Array(memory.buffer, 0, arr.length);
             array.set(arr)
             sortIntArray(array.byteOffset, array.length);
             let end = performance.now();
@@ -270,11 +270,13 @@ async function startTest() {
         load++;
     }
 
-    let resultArea = {info: userInfo, measurements: testArea};
-    let resultSort = {info: userInfo, measurements: testSort};
-    let resultCells = {info: userInfo, measurements: testCells};
+    let resultArea = {info: userInfo, testsArea: testArea};
+    let resultSort = {info: userInfo, testsSort: testSort};
+    let resultCells = {info: userInfo, testsCells: testCells};
 
-    console.log(result);
+    console.log(resultArea);
+    console.log(resultSort);
+    console.log(resultCells);
 
     await fetch('https://webassemblytest.herokuapp.com/addTestData', {
         method: 'POST', // or 'PUT'
@@ -318,9 +320,7 @@ async function startTest() {
             console.error('Error:', error);
         });
 
-
     load += 3;
-
 
     progressbar.style.width = (load / (numTests + 4)).toString() + "%";
     document.querySelector('.wrapper').innerHTML = "<div style='margin-top: 30%'></div><h1>Vielen Dank für die Teilnahme!</h1><a href=\"https://www.google.at/\"><button type=\"button\" class=\"btn btn-outline-secondary\" >Zu Google</button></div>";
