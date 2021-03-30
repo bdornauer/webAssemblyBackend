@@ -192,8 +192,12 @@ async function startTest() {
     let b = 10;
     let userInfo = infoUser();
     let results = {
-        areaJS: [],
-        areaWAMS: [],
+        areaJS10000: [],
+        areaJS100000: [],
+        areaJS1000000: [],
+        areaWAMS10000: [],
+        areaWAMS100000: [],
+        areaWAMS1000000: [],
         sortJS: [],
         sortWAMS: [],
         cellsJS: [],
@@ -205,13 +209,21 @@ async function startTest() {
         let arr = createIntegerArray(10000);
         let arr0and1 = createInteger0and1(10000);
 
+
+        results.areaJS10000.push(measureAreaCalcJS(10000, a, b));
+        results.areaWAMS10000.push(await measureAreaCalcWAMS(10000, a, b));
+
         results.sortJS.push(measureSortingJS(arr));
-        results.areaJS.push(measureAreaCalcJS(numSquares, a, b));
         results.cellsJS.push(measureCellularJS(arr0and1, numCycleCells))
 
+        results.areaJS100000.push(measureAreaCalcJS(100000, a, b));
+        results.areaWAMS100000.push(await measureAreaCalcWAMS(100000, a, b));
+
         results.sortWAMS.push(await measureSortingWAMS(arr))
-        results.areaWAMS.push(await measureAreaCalcWAMS(numSquares, a, b));
         results.cellsWAMS.push(await measureCellularWAMS(arr0and1, numCycleCells));
+
+        results.areaJS1000000.push(measureAreaCalcJS(1000000, a, b));
+        results.areaWAMS1000000.push(await measureAreaCalcWAMS(1000000, a, b));
 
         progressbar.style.width = ((load / (numTests + 4)) * 100).toString() + "%";
         load++;
